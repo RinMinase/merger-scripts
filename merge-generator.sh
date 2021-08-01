@@ -7,7 +7,7 @@ declare -a subs
 rm -f merge.bat
 
 # color codes
-sh_b="\e[1;31m" # blue, welcome text
+sh_b="\e[1;34m" # blue, welcome text
 sh_g="\e[1;32m" # green, success text
 sh_c="\e[1;36m" # cyan, info text
 sh_r="\e[0m" # reset color
@@ -18,7 +18,7 @@ echo -e "${sh_b} Loading merge script generator ${sh_r}"
 echo -e "${sh_c} INFO ${sh_r} Looking for all mkv files present in the root folder"
 for mkv in *.mkv ; do
   base="${mkv%mkv}"
-  args=(-o "\"output/${base}mkv\"" "\"${mkv}\"")
+  args=(--default-language en -o "\"output/${base}mkv\"" "\"${mkv}\"")
   subs=()
   audio=()
 
