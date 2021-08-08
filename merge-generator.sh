@@ -24,7 +24,7 @@ for mkv in *.mkv ; do
 
   # look for subtitles with the same base name
   echo -e "${sh_c} INFO ${sh_r} Looking for subtitles with the same base name"
-  for subsFile in *.ass ; do
+  for subsFile in *.{ass,srt,mks} ; do
     subsFileBase=$(grep -F "${base}" <<<"$subsFile")
 
     if [ -e "${subsFileBase}" ]; then
