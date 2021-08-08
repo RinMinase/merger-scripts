@@ -32,6 +32,17 @@ for mkv in *.mkv ; do
       break
     fi
   done
+
+  # look for audio with the same base name
+  echo -e "${sh_c} INFO ${sh_r} Looking for audio with the same base name"
+  for subsFile in *.mka ; do
+    audFileBase=$(grep -F "${base}" <<<"$subsFile")
+
+    if [ -e "${audFileBase}" ]; then
+      audio=("${subs[@]}" "\"${audFileBase}\"")
+      break
+    fi
+  done
   
   # look for eng folder
   echo -e "${sh_c} INFO ${sh_r} Checking if 'eng' folder is present"
