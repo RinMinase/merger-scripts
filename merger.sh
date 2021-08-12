@@ -93,7 +93,8 @@ for mkv in *.mkv ; do
 
   # create output file
   echo -e "${sh_c} INFO ${sh_r} Generating output file for ${base}"
-  mkvmerge "${args[@]}"
+  mkvmerge "${args[@]}" | (sed -n /^The/q;cat)
+  # mkvmerge "${args[@]}" | (sed -n /^The/q;cat) | (sed 2d;cat)
 done
 
 echo -e "${sh_g} SUCCESS ${sh_r} Finished creating output files"
