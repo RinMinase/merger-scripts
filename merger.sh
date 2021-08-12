@@ -4,7 +4,7 @@
 declare -a args
 declare -a audio
 declare -a subs
-rm -f merge.bat
+declare -a fonts
 
 # color codes
 sh_b="\e[1;34m" # blue, welcome text
@@ -21,6 +21,7 @@ for mkv in *.mkv ; do
   args=(--default-language en -o "output/${base}mkv" "${mkv}")
   subs=()
   audio=()
+  fonts=()
 
   # look for subtitles with the same base name
   echo -e "${sh_c} INFO ${sh_r} Looking for subtitles with the same base name"
@@ -71,26 +72,29 @@ for mkv in *.mkv ; do
       fi
     done
   fi
-
-  args=("${args[@]}" "${audio[@]}" "${subs[@]}")
   
   # look for fonts folder
   echo -e "${sh_c} INFO ${sh_r} Looking for 'fonts' folder"
   if [[ -d "fonts" ]]; then
     for font in fonts/*.ttf ; do
-      args=("${args[@]}" "--attachment-mime-type application/x-truetype-font --attach-file ${font}")
+		if [ -e "${font}" ]; then
+			fonts=("${fonts[@]}" --attachment-mime-type application/x-truetype-font --attach-file "${font}")
+		fi
     done
 
     for font in fonts/*.otf ; do
-      args=("${args[@]}" "--attachment-mime-type application/vnd.ms-opentype --attach-file ${font}")
+		if [ -e "${font}" ]; then
+			fonts=("${fonts[@]}" --attachment-mime-type application/vnd.ms-opentype --attach-file "${font}")
+		fi
     done
   fi
 
+  args=("${args[@]}" "${audio[@]}" "${subs[@]}" "${fonts[@]}")
+
   # create output file
-  echo -e "${sh_c} INFO ${sh_r} Generating output file"
-  echo -e ${args[@]}
+  echo -e "${sh_c} INFO ${sh_r} Generating output file for ${base}"
   mkvmerge "${args[@]}"
 done
 
 echo -e "${sh_g} SUCCESS ${sh_r} Finished creating output files"
-sleep 2
+read -p "Press any key to continue... " -n1 -s
