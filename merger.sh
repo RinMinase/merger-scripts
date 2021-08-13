@@ -16,7 +16,7 @@ echo -e "${sh_b} Loading merge script generator ${sh_r}"
 
 # loop over all MP4 files
 echo -e "${sh_c} INFO ${sh_r} Looking for all mkv files present in the root folder"
-for mkv in *.mkv ; do
+for mkv in *.{mkv,MKV} ; do
   base="${mkv%mkv}"
   args=(--default-language en -o "output/${base}mkv" "${mkv}")
   subs=()
@@ -25,7 +25,7 @@ for mkv in *.mkv ; do
 
   # look for subtitles with the same base name
   echo -e "${sh_c} INFO ${sh_r} Looking for subtitles with the same base name"
-  for subsFile in *.{ass,srt,mks} ; do
+  for subsFile in *.{ass,ASS,srt,SRT,mks,MKS} ; do
     subsFileBase=$(grep -F "${base}" <<<"$subsFile")
 
     if [ -e "${subsFileBase}" ]; then
@@ -36,8 +36,8 @@ for mkv in *.mkv ; do
 
   # look for audio with the same base name
   echo -e "${sh_c} INFO ${sh_r} Looking for audio with the same base name"
-  for subsFile in *.mka ; do
-    audFileBase=$(grep -F "${base}" <<<"$subsFile")
+  for audioFile in *.{mka,MKA} ; do
+    audFileBase=$(grep -F "${base}" <<<"$audioFile")
 
     if [ -e "${audFileBase}" ]; then
       audio=("${subs[@]}" "${audFileBase}")
@@ -52,7 +52,7 @@ for mkv in *.mkv ; do
 
     # look for eng audio with same base name
     echo -e "${sh_c} INFO ${sh_r} Looking for audio with the same base name"
-    for engfile in eng/*.mka ; do
+    for engfile in eng/*.{mka,MKA} ; do
       engFileBase=$(grep -F "${base}" <<<"$engfile")
 
       if [ -e "${engFileBase}" ]; then
@@ -63,7 +63,7 @@ for mkv in *.mkv ; do
 
     # look for eng subtitles with same base name
     echo -e "${sh_c} INFO ${sh_r} Looking for other subtitles with the same base name in 'eng' folder"
-    for engfile in eng/*.ass ; do
+    for engfile in eng/*.{ass,ASS} ; do
       engFileBase=$(grep -F "${base}" <<<"$engfile")
 
       if [ -e "${engFileBase}" ]; then
@@ -76,13 +76,13 @@ for mkv in *.mkv ; do
   # look for fonts folder
   echo -e "${sh_c} INFO ${sh_r} Looking for 'fonts' folder"
   if [[ -d "fonts" ]]; then
-    for font in fonts/*.ttf ; do
+    for font in fonts/*.{ttf,TTF} ; do
 		if [ -e "${font}" ]; then
 			fonts=("${fonts[@]}" --attachment-mime-type application/x-truetype-font --attach-file "${font}")
 		fi
     done
 
-    for font in fonts/*.otf ; do
+    for font in fonts/*.{otf,OTF} ; do
 		if [ -e "${font}" ]; then
 			fonts=("${fonts[@]}" --attachment-mime-type application/vnd.ms-opentype --attach-file "${font}")
 		fi
